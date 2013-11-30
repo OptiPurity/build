@@ -1314,6 +1314,7 @@ endif
 .PHONY: otapackage liquid
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 liquid: otapackage
+	$(hide) ./vendor/liquid/tools/squisher
 
 # -----------------------------------------------------------------
 # The update package
