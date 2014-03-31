@@ -143,14 +143,12 @@ ifeq ($(strip $(LOCAL_ENABLE_APROF)),true)
 endif
 
 ifeq ($(strip $(ENABLE_GRAPHITE)),true)
-  ifneq ($(strip $(LOCAL_DISABLE_GRAPHITE)),true)
-    ifeq ($(strip $(LOCAL_CLANG)),)
-      ifeq ($(strip $(LOCAL_IS_HOST_MODULE)),)
-        LOCAL_CFLAGS += -fgraphite -floop-parallelize-all -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block
-        LOCAL_CPPFLAGS += -fgraphite -floop-parallelize-all -floop-interchange -ftree-loop-distribution -floop-strip-mine -floop-block
-      endif
+    ifneq ($(strip $(OPT_A_LOT)),true)
+        ifneq ($(strip $(LOCAL_DISABLE_GRAPHITE)),true)
+            LOCAL_CFLAGS += -fgraphite -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
+            LOCAL_CPPFLAGS += -fgraphite -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
+        endif
     endif
-  endif
 endif
 
 ###########################################################
