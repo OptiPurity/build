@@ -1307,9 +1307,9 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) $(DISTTOOLS)
 	   -k $(KEY_CERT_PAIR) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-.PHONY: otapackage liquid
+.PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-liquid: otapackage
+bacon: otapackage
 ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
         @echo "Running releasetool"
         $(hide) $(TARGET_CUSTOM_RELEASETOOL)
