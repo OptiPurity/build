@@ -1314,7 +1314,8 @@ ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
         @echo "Running releasetool"
         $(hide) $(TARGET_CUSTOM_RELEASETOOL)
 else
-	$(hide) ./vendor/rascarlo/tools/squisher
+	@echo -e ${CL_YLW}"Running squisher releasetool..."${CL_RST}
+	$(hide) OTAPACKAGE=$(INTERNAL_OTA_PACKAGE_TARGET) APKCERTS=$(APKCERTS_FILE) ./vendor/rascarlo/tools/squisher
 endif
 
 # -----------------------------------------------------------------
