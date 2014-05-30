@@ -1315,7 +1315,7 @@ ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
         $(hide) $(TARGET_CUSTOM_RELEASETOOL)
 else
 	@echo -e "Running squisher releasetool..."
-	$(hide) ./vendor/rascarlo/tools/squisher
+	$(hide) ./vendor/purity/tools/squisher
 endif
 
 # -----------------------------------------------------------------
