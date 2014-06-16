@@ -25,12 +25,10 @@ endif
 
 ifndef skip_build_from_source
 
-LOCAL_DISABLE_GRAPHITE := true
 include $(BUILD_SYSTEM)/binary.mk
 
 $(LOCAL_BUILT_MODULE): $(all_objects) $(all_libraries)
 	$(transform-host-o-to-executable)
-LOCAL_DISABLE_GRAPHITE := false
 
 endif  # skip_build_from_source
 

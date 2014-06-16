@@ -21,14 +21,12 @@
 
 PRODUCT_PACKAGES := \
     libfwdlockengine \
-    VideoEditor \
     WAPPushManager
 
 PRODUCT_PACKAGES += \
     Galaxy4 \
     LiveWallpapers \
     LiveWallpapersPicker \
-    PhaseBeam \
     VisualizationWallpapers \
     PhotoTable
 
