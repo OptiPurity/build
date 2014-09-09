@@ -12,10 +12,8 @@ arch_variant_cflags := \
     -mfloat-abi=softfp \
     -mfpu=vfpv3-d16
 
-ifneq (,$(findstring cpu=cortex-a9,$(TARGET_EXTRA_CFLAGS)))
+ifeq ($(strip $(TARGET_CPU_VARIANT)),cortex-a8)
 arch_variant_ldflags := \
-        -Wl,--no-fix-cortex-a8
-else
-arch_variant_ldflags := \
-        -Wl,--fix-cortex-a8
+	-Wl,--fix-cortex-a8
 endif
+
