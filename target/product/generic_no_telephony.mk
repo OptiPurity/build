@@ -32,7 +32,7 @@ PRODUCT_PACKAGES := \
     InputDevices \
     Keyguard \
     LatinIME \
-    Launcher3 \
+    OptiLauncher \
     MusicFX \
     OneTimeInitializer \
     PrintSpooler \
