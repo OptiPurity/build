@@ -95,6 +95,7 @@ TARGET_arm_CFLAGS :=    -O3 \
 			-funsafe-loop-optimizations \
 			-fsection-anchors \
 			-fivopts \
+			-pipe \
 			-ftree-loop-im \
 			-ftree-loop-ivcanon \
 			-ffunction-sections \
@@ -109,7 +110,7 @@ TARGET_arm_CFLAGS :=    -O3 \
 
 # Modules can choose to compile some source as thumb.
 TARGET_thumb_CFLAGS :=  -mthumb \
-                        -O2 \
+                        -O3 \
                         -fomit-frame-pointer \
                         -fstrict-aliasing \
                         -fno-tree-vectorize \
@@ -126,6 +127,8 @@ TARGET_thumb_CFLAGS :=  -mthumb \
 			-funsafe-loop-optimizations \
 			-fsection-anchors \
 			-fivopts \
+			-pipe \
+			-fno-unroll-loops \
 			-ftree-loop-im \
 			-ftree-loop-ivcanon \
 			-ffunction-sections \
