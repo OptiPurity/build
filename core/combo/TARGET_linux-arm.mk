@@ -159,7 +159,6 @@ ifeq ($(FORCE_ARM_DEBUGGING),true)
   TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fstrict-aliasing
   TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer -fstrict-aliasing
 endif
-endif
 
 android_config_h := $(call select-android-config-h,linux-arm)
 
