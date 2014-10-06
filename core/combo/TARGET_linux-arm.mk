@@ -34,11 +34,18 @@ ifeq ($(strip $(TARGET_ARCH_VARIANT)),)
 TARGET_ARCH_VARIANT := armv5te
 endif
 
-ifeq ($(strip $(TARGET_GCC_VERSION_EXP)),)
-TARGET_GCC_VERSION := 4.7
+ifeq ($(strip $(TARGET_GCC_VERSION_AND)),)
+TARGET_GCC_VERSION_AND := 4.8-sm
 else
-TARGET_GCC_VERSION := $(TARGET_GCC_VERSION_EXP)
+TARGET_GCC_VERSION_AND := $(TARGET_GCC_VERSION_AND)
 endif
+
+ifeq ($(strip $(TARGET_GCC_VERSION_ARM)),)
+TARGET_GCC_VERSION_ARM := 4.7-sm
+else
+TARGET_GCC_VERSION_ARM := $(TARGET_GCC_VERSION_ARM)
+endif
+
 
 TARGET_ARCH_SPECIFIC_MAKEFILE := $(BUILD_COMBOS)/arch/$(TARGET_ARCH)/$(TARGET_ARCH_VARIANT).mk
 ifeq ($(strip $(wildcard $(TARGET_ARCH_SPECIFIC_MAKEFILE))),)
@@ -49,7 +56,7 @@ include $(TARGET_ARCH_SPECIFIC_MAKEFILE)
 
 # You can set TARGET_TOOLS_PREFIX to get gcc from somewhere else
 ifeq ($(strip $(TARGET_TOOLS_PREFIX)),)
-TARGET_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$(TARGET_GCC_VERSION)
+TARGET_TOOLCHAIN_ROOT := prebuilts/gcc/$(HOST_PREBUILT_TAG)/arm/arm-linux-androideabi-$(TARGET_GCC_VERSION_AND)
 TARGET_TOOLS_PREFIX := $(TARGET_TOOLCHAIN_ROOT)/bin/arm-linux-androideabi-
 endif
 
@@ -68,13 +75,73 @@ endif
 
 TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-TARGET_arm_CFLAGS := -O3 -DNDEBUG -fstrict-aliasing -funsafe-loop-optimizations -fsection-anchors -fivopts -ftree-loop-im -ftree-loop-ivcanon -ffunction-sections -fdata-sections -funswitch-loops -frename-registers -fomit-frame-pointer -fgcse-sm -fgcse-las -fweb -ftracer -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=maybe-uninitialized -Wno-error=uninitialized
+TARGET_arm_CFLAGS :=    -O3 \
+                        -fomit-frame-pointer \
+                        -fstrict-aliasing \
+                        -funswitch-loops \
+                        -fno-tree-vectorize \
+                        -fno-inline-functions \
+                        -Wstrict-aliasing=3 \
+                        -Werror=strict-aliasing \
+                        -fgcse-after-reload \
+                        -fno-ipa-cp-clone \
+                        -fno-vect-cost-model \
+                        -Wno-error=unused-parameter \
+                        -Wno-error=unused-but-set-variable \
+			-DNDEBUG \
+			-funsafe-loop-optimizations \
+			-fsection-anchors \
+			-fivopts \
+			-ftree-loop-im \
+			-ftree-loop-ivcanon \
+			-ffunction-sections \
+			-fdata-sections \
+			-frename-registers \
+			-fomit-frame-pointer \
+			-fgcse-sm \
+			-fgcse-las \
+			-fweb \
+			-ftracer \
+			-Wno-error=maybe-uninitialized
 
-TARGET_thumb_CFLAGS := -mthumb -O2 -DNDEBUG -funsafe-loop-optimizations -fsection-anchors -fivopts -ftree-loop-im -ftree-loop-ivcanon -ffunction-sections -fdata-sections -funswitch-loops -frename-registers -frerun-cse-after-loop -fomit-frame-pointer -fgcse-sm -fgcse-las -fweb -ftracer -finline-functions -fpredictive-commoning -fgcse-after-reload -fipa-cp-clone -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=maybe-uninitialized -Wno-error=uninitialized
+# Modules can choose to compile some source as thumb.
+TARGET_thumb_CFLAGS :=  -mthumb \
+                        -Os \
+                        -fomit-frame-pointer \
+                        -fstrict-aliasing \
+                        -fno-tree-vectorize \
+                        -fno-inline-functions \
+                        -fno-unswitch-loops \
+                        -Wstrict-aliasing=3 \
+                        -Werror=strict-aliasing \
+                        -fgcse-after-reload \
+                        -fno-ipa-cp-clone \
+                        -fno-vect-cost-model \
+                        -Wno-error=unused-parameter \
+                        -Wno-error=unused-but-set-variable \
+			-DNDEBUG \
+			-funsafe-loop-optimizations \
+			-fsection-anchors \
+			-fivopts \
+			-ftree-loop-im \
+			-ftree-loop-ivcanon \
+			-ffunction-sections \
+			-fdata-sections \
+			-funswitch-loops \
+			-frename-registers \
+			-frerun-cse-after-loop \
+			-fgcse-sm \
+			-fgcse-las \
+			-fweb \
+			-ftracer \
+			-Wno-error=maybe-uninitialized
 
-TARGET_RELEASE_CFLAGS := -O3 -DNDEBUG -fno-strict-aliasing -funsafe-loop-optimizations -fsection-anchors -fivopts -ftree-loop-im -ftree-loop-ivcanon -ffunction-sections -fdata-sections -funswitch-loops -frename-registers -fomit-frame-pointer -fgcse-sm -fgcse-las -fweb -ftracer -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=maybe-uninitialized -Wno-error=uninitialized
-
-TARGET_GLOBAL_CPPFLAGS += -O3 -DNDEBUG -funsafe-loop-optimizations -fsection-anchors -fivopts -ftree-loop-im -ftree-loop-ivcanon -ffunction-sections -fdata-sections -funswitch-loops -frename-registers -fomit-frame-pointer -fgcse-sm -fgcse-las -fweb -ftracer -Wno-error=unused-parameter -Wno-error=unused-but-set-variable -Wno-error=maybe-uninitialized -Wstrict-aliasing=3 -Wno-error=uninitialized
+# Turn off strict-aliasing if we're building an AOSP variant without the
+# patchset...
+ifeq ($(DEBUG_NO_STRICT_ALIASING),yes)
+TARGET_arm_CFLAGS += -fno-strict-aliasing -Wno-error=strict-aliasing
+TARGET_thumb_CFLAGS += -fno-strict-aliasing -Wno-error=strict-aliasing
+endif
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -86,23 +153,27 @@ TARGET_GLOBAL_CPPFLAGS += -O3 -DNDEBUG -funsafe-loop-optimizations -fsection-anc
 # with -mlong-calls.  When built at -O0, those libraries are
 # too big for a thumb "BL <label>" to go from one end to the other.
 ifeq ($(FORCE_ARM_DEBUGGING),true)
-  TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fno-strict-aliasing
-  TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer
+  TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fstrict-aliasing
+  TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer -fstrict-aliasing
+endif
 endif
 
 android_config_h := $(call select-android-config-h,linux-arm)
 
 TARGET_GLOBAL_CFLAGS += \
-			-msoft-float -fpic -fPIE \
+			-msoft-float -fpic $(PIE_GLOBAL_CFLAGS) \
 			-ffunction-sections \
 			-fdata-sections \
 			-funwind-tables \
+			-fstrict-aliasing \
 			-fstack-protector \
 			-Wa,--noexecstack \
 			-Werror=format-security \
 			-D_FORTIFY_SOURCE=2 \
 			-fno-short-enums \
 			$(arch_variant_cflags) \
+			-Wno-error=unused-parameter \
+			-Wno-error=unused-but-set-variable \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h)) \
 			-Wno-unused-parameter \
@@ -116,7 +187,7 @@ TARGET_GLOBAL_CFLAGS += \
 # in their exported C++ functions). Also, GCC 4.5 has already
 # removed the warning from the compiler.
 #
-TARGET_GLOBAL_CFLAGS += -Wno-psabi
+TARGET_GLOBAL_CFLAGS += -Wno-psabi -fstrict-aliasing
 
 TARGET_GLOBAL_LDFLAGS += \
 			-Wl,-z,noexecstack \
@@ -127,9 +198,59 @@ TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--icf=safe \
 			$(arch_variant_ldflags)
 
-TARGET_GLOBAL_CFLAGS += -mthumb-interwork
+TARGET_GLOBAL_CFLAGS += -mthumb-interwork -fstrict-aliasing
 
-TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
+TARGET_GLOBAL_CPPFLAGS += \
+			-fvisibility-inlines-hidden \
+			-O3 \
+			-DNDEBUG \
+			-funsafe-loop-optimizations \
+			-fsection-anchors \
+			-fivopts \
+			-ftree-loop-im \
+			-ftree-loop-ivcanon \
+			-ffunction-sections \
+			-fdata-sections \
+			-funswitch-loops \
+			-frename-registers \
+			-fomit-frame-pointer \
+			-fgcse-sm \
+			-fgcse-las \
+			-fweb \
+			-ftracer \
+			-Wno-error=unused-parameter \
+			-Wno-error=unused-but-set-variable \
+			-Wno-error=maybe-uninitialized \
+			-Wstrict-aliasing=3
+
+# More flags/options can be added here
+TARGET_RELEASE_CFLAGS += \
+			-O3
+			-DNDEBUG \
+			-g \
+			-fgcse-after-reload \
+			-frerun-cse-after-loop \
+			-frename-registers \
+			-fno-ipa-cp-clone \
+			-fno-vect-cost-model \
+			-Wno-error=unused-parameter \
+			-Wno-error=unused-but-set-variable \
+			-DNDEBUG \
+			-fno-strict-aliasing \
+			-funsafe-loop-optimizations \
+			-fsection-anchors \
+			-fivopts \
+			-ftree-loop-im \
+			-ftree-loop-ivcanon \
+			-ffunction-sections \
+			-fdata-sections \
+			-funswitch-loops \
+			-fomit-frame-pointer \
+			-fgcse-sm \
+			-fgcse-las \
+			-fweb \
+			-ftracer \
+			-Wno-error=maybe-uninitialized
 
 libc_root := bionic/libc
 libm_root := bionic/libm
