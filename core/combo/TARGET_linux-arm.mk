@@ -170,6 +170,7 @@ TARGET_GLOBAL_CFLAGS += \
 			-ffunction-sections \
 			-fdata-sections \
 			-funwind-tables \
+			-pipe \
 			-fstrict-aliasing \
 			-fstack-protector \
 			-Wa,--noexecstack \
@@ -218,6 +219,7 @@ TARGET_GLOBAL_CPPFLAGS += \
 			-fdata-sections \
 			-funswitch-loops \
 			-frename-registers \
+			-pipe \
 			-fomit-frame-pointer \
 			-fgcse-sm \
 			-fgcse-las \
@@ -245,6 +247,7 @@ TARGET_RELEASE_CFLAGS += \
 			-funsafe-loop-optimizations \
 			-fsection-anchors \
 			-fivopts \
+			-pipe \
 			-ftree-loop-im \
 			-ftree-loop-ivcanon \
 			-ffunction-sections \
