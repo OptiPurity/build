@@ -232,7 +232,7 @@ TARGET_GLOBAL_CPPFLAGS += \
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS += \
-			-O3
+			-O3 \
 			-DNDEBUG \
 			-g \
 			-fgcse-after-reload \
