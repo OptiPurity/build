@@ -56,7 +56,6 @@ arch_variant_cflags += \
     -fgcse-sm \
     -fweb \
     -ffp-contract=fast \
-    -ftree-loop-linear \
     -Wno-unused-parameter \
     -Wno-unused-value \
     -Wno-unused-function \
