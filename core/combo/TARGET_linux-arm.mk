@@ -106,7 +106,8 @@ TARGET_arm_CFLAGS :=    -O3 \
 			-fgcse-las \
 			-fweb \
 			-ftracer \
-			-Wno-error=maybe-uninitialized
+			-Wno-error=maybe-uninitialized \
+			-Wno-error=uninitialized
 
 # Modules can choose to compile some source as thumb.
 TARGET_thumb_CFLAGS :=  -mthumb \
@@ -140,7 +141,8 @@ TARGET_thumb_CFLAGS :=  -mthumb \
 			-fgcse-las \
 			-fweb \
 			-ftracer \
-			-Wno-error=maybe-uninitialized
+			-Wno-error=maybe-uninitialized \
+			-Wno-error=uninitialized
 
 # Turn off strict-aliasing if we're building an AOSP variant without the
 # patchset...
@@ -227,8 +229,9 @@ TARGET_GLOBAL_CPPFLAGS += \
 			-ftracer \
 			-Wno-error=unused-parameter \
 			-Wno-error=unused-but-set-variable \
+			-Wstrict-aliasing=3 \
 			-Wno-error=maybe-uninitialized \
-			-Wstrict-aliasing=3
+			-Wno-error=uninitialized
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS += \
@@ -258,7 +261,8 @@ TARGET_RELEASE_CFLAGS += \
 			-fgcse-las \
 			-fweb \
 			-ftracer \
-			-Wno-error=maybe-uninitialized
+			-Wno-error=maybe-uninitialized \
+			-Wno-error=uninitialized
 
 libc_root := bionic/libc
 libm_root := bionic/libm
