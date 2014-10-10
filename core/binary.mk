@@ -165,29 +165,6 @@ LOCAL_CPPFLAGS += $(THREAD_FLAGS)
 endif
 ## end pthread support
 #####################################################################################################
-## begin graphite
-ifdef DISABLE_GRAPHTE_MODULES
-DISABLE_GRAPHTE_MODULES += libjni_filtershow_filters \
-	libstagefright_amrwbenc \
-	libFFTEm \
-	libwebviewchromium \
-	libstagefright_mp3dec \
-	libwebrtc_spl
-else
-DISABLE_GRAPHTE_MODULES := libjni_filtershow_filters \
-	libstagefright_amrwbenc \
-	libFFTEm \
-	libwebviewchromium \
-	libstagefright_mp3dec \
-	libwebrtc_spl
-endif
-
-ifeq ($(filter $(DISABLE_GRAPHTE_MODULES),$(LOCAL_MODULE)),)
-	LOCAL_CFLAGS += -fgraphite -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
-	LOCAL_CPPFLAGS += -fgraphite -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
-endif
-endif
-## end graphite
 
 ###########################################################
 ## Explicitly declare assembly-only __ASSEMBLY__ macro for
