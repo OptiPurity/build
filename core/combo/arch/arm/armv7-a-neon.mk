@@ -35,7 +35,7 @@ endif
 
 arch_variant_cflags += \
     -mfloat-abi=softfp \
-    -mfpu=neon \
+    -mfpu=neon-vfpv4 \
     -DHARDFLOAT \
     -DSK_HARDWARE_FLOAT \
     -DNDEBUG \
