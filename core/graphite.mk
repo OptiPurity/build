@@ -15,6 +15,7 @@
 # Force disable some modules that are not compatible with graphite flags
 LOCAL_DISABLE_GRAPHITE := \
 	libunwind \
+	libjni_filtershow_filters \
 	libFFTEm \
 	libicui18n \
 	libskia \
