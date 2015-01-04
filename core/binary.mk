@@ -66,6 +66,12 @@ else
   endif
 endif
 
+ifndef LOCAL_IS_HOST_MODULE
+ifeq ($(LOCAL_CLANG),)
+include $(BUILD_SYSTEM)/graphite.mk
+endif
+endif
+
 ifdef LOCAL_SDK_VERSION
   # Get the list of INSTALLED libraries as module names.
   # We cannot compute the full path of the LOCAL_SHARED_LIBRARIES for
